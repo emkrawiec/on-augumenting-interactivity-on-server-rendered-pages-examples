@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "preview": "http-server -p 8080 ./examples/",
-    "build": "copyfiles ./examples/alpinejs/inline/**/* ./dist/ && copyfiles -i ./examples/common/**/* ./dist/"
+    "build": "copyfiles -f ./examples/alpinejs/inline/**/* ./dist/ && copyfiles -f ./examples/common/**/* ./dist/common/"
   },
   "devDependencies": {
     "copyfiles": "^2.4.1",
