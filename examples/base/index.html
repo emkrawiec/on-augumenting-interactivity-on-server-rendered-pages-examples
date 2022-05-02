@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>Base Sample App | On interactivity on server rendered apps</title>
+    <link rel="stylesheet" href="/common/style.css">
+  </head>
+  <body>
+    <form class="o-container">
+      <div class="u-flex u-align-center u-justify-between">
+        <p class="c-pricing-result">$</p>
+        <label>
+          Users
+          <input type="number" step="1" min="1" name="users" value="1" />
+        </label>
+      </div>
+      <fieldset>
+        <legend>Periodicity</legend>
+        <label>
+          <input type="radio" name="periodicity" value="8" checked />
+          Monthly
+        </label>
+        <label>
+          <input type="radio" name="periodicity" value="0" />
+          Annually
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>Features</legend>
+        <div>
+          <label>
+            <input type="checkbox" value="10" name="feature-1" />
+            Feature 1
+          </label>
+        </div>
+        <div>
+          <label>
+            <input type="checkbox" value="5" name="feature-2" />
+            Feature 2
+          </label>
+        </div>
+      </fieldset>
+    </form>
+  </body>
+</html>

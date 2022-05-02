@@ -1,0 +1,15 @@
+{
+  "name": "on-augumenting-interativity-on-server-rendered-pages-examples",
+  "version": "1.0.0",
+  "author": "Michał Krawiec <mk.krawiec.m@gmail.com>",
+  "description": "Example apps for 'On augumenting interactivity on server rendered pages' blog post - https://michalkrawiec.com/interactivity-server-render-pages/",
+  "license": "MIT",
+  "scripts": {
+    "preview": "http-server -p 8080 ./examples/",
+    "build": "copyfiles ./examples/alpinejs/inline/**/* ./dist/ && copyfiles -i ./examples/common/**/* ./dist/"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "http-server": "^14.1.0"
+  }
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>
+      PetiteVue inline way Sample App | On interactivity on server rendered apps
+    </title>
+    <link rel="stylesheet" href="/common/style.css" />
+  </head>
+  <body>
+    <form
+      class="o-container"
+      v-scope="{
+      basePrice: 20,
+      periodicity: '0',
+      users: '1',
+      features: [],
+      get price() {
+        const val =
+          (this.basePrice +
+            this.features.reduce((acc, curr) => (acc += Number(curr)), 0) +
+            Number(this.periodicity)) *
+          this.users;
+        return `$${val}`;
+      }
+    }"
+    >
+      <div class="u-flex u-align-center u-justify-between">
+        <h1 v-text="price"></h1>
+        <label>
+          Users
+          <input
+            type="number"
+            step="1"
+            min="1"
+            name="users"
+            value="1"
+            v-model="users"
+          />
+        </label>
+      </div>
+      <fieldset>
+        <legend>Periodicity</legend>
+        <label>
+          <input
+            type="radio"
+            name="periodicity"
+            value="8"
+            checked
+            v-model="periodicity"
+          />
+          Monthly
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="periodicity"
+            value="0"
+            v-model="periodicity"
+          />
+          Annually
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>Features</legend>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              value="10"
+              name="feature-1"
+              v-model="features"
+            />
+            Feature 1
+          </label>
+        </div>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              value="5"
+              name="feature-2"
+              v-model="features"
+            />
+            Feature 2
+          </label>
+        </div>
+      </fieldset>
+    </form>
+
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/petite-vue@0.2.2/dist/petite-vue.iife.js"
+      init
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>
+      Vue 3.x scoped slots way Sample App | On interactivity on server rendered
+      apps
+    </title>
+    <link rel="stylesheet" href="/common/style.css" />
+  </head>
+  <body>
+    <div id="pricing-root">
+      <div>
+        <Pricing
+          v-slot="{ users, periodicity, features, price, updateUsers, updatePeriodicity }"
+          :base-price="20"
+        >
+          <form class="o-container">
+            <div class="u-flex u-align-center u-justify-between">
+              <h1>{{ price }}</h1>
+              <label>
+                Users
+                <input
+                  type="number"
+                  step="1"
+                  min="1"
+                  name="users"
+                  :value="users"
+                  @input="(e) => updateUsers(e.target.value)"
+                />
+              </label>
+            </div>
+            <fieldset>
+              <legend>Periodicity</legend>
+              <label>
+                <input
+                  type="radio"
+                  name="periodicity"
+                  value="8"
+                  @change="(e) => e.target.checked && updatePeriodicity(e.target.value)"
+                />
+                Monthly
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="periodicity"
+                  value="0"
+                  checked
+                  @change="(e) => e.target.checked && updatePeriodicity(e.target.value)"
+                />
+                Annually
+              </label>
+            </fieldset>
+            <fieldset>
+              <legend>Features</legend>
+              <div>
+                <label>
+                  <input
+                    type="checkbox"
+                    value="10"
+                    name="feature-1"
+                    v-model="features"
+                  />
+                  Feature 1
+                </label>
+              </div>
+              <div>
+                <label>
+                  <input
+                    type="checkbox"
+                    value="5"
+                    name="feature-2"
+                    v-model="features"
+                  />
+                  Feature 2
+                </label>
+              </div>
+            </fieldset>
+          </form>
+        </Pricing>
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/vue@3.2.26/dist/vue.global.prod.js"
+    ></script>
+
+    <script type="text/javascript">
+      const app = Vue.createApp({});
+
+      app.component("pricing", {
+        template:
+          '<slot :users="users" :price="price" :features="features" :periodicity="periodicity" :updateUsers="updateUsers" :updatePeriodicity="updatePeriodicity" :handleFeature="handleFeature"  />',
+        props: {
+          basePrice: {
+            type: Number,
+            required: true,
+          },
+        },
+        setup(props) {
+          const { ref, computed } = Vue;
+          const features = ref([]);
+          const periodicity = ref(0);
+          const users = ref(6);
+          const price = computed(() => {
+            const val =
+              (props.basePrice +
+                features.value.reduce(
+                  (acc, curr) => (acc += Number(curr.val)),
+                  0
+                ) +
+                Number(periodicity.value)) *
+              users.value;
+            return `$${val}`;
+          });
+          const updateUsers = (val) => (users.value = val);
+          const updatePeriodicity = (val) => (periodicity.value = val);
+          const handleFeature = ({ id, checked, val }) => {
+            if (checked) {
+              features.value = [...features.value, { id, val }];
+            } else {
+              features.value = features.value.filter((f) => id !== f.id);
+            }
+          };
+
+          return {
+            users,
+            features,
+            periodicity,
+            price,
+            updateUsers,
+            updatePeriodicity,
+            handleFeature,
+          };
+        },
+      });
+
+      app.mount("#pricing-root");
+    </script>
+  </body>
+</html>
+z

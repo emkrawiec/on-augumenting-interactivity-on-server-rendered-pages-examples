@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>
+      Stimulus Sample App | On interactivity on server rendered apps
+    </title>
+    <link rel="stylesheet" href="/common/style.css" />
+  </head>
+  <body>
+    <form
+      class="o-container"
+      data-controller="pricing"
+      data-pricing-base-price-value="20"
+    >
+      <div class="u-flex u-align-center u-justify-between">
+        <p class="c-pricing-result" data-pricing-target="price"></p>
+        <label>
+          Users
+          <input
+            type="number"
+            step="1"
+            min="1"
+            name="users"
+            value="1"
+            data-action="input->pricing#recalculate"
+            data-pricing-target="users"
+          />
+        </label>
+      </div>
+      <fieldset>
+        <legend>Periodicity</legend>
+        <label>
+          <input
+            type="radio"
+            name="periodicity"
+            value="8"
+            checked
+            data-action="change->pricing#recalculate"
+            data-pricing-target="periodicity"
+          />
+          Monthly
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="periodicity"
+            value="0"
+            data-action="change->pricing#recalculate"
+            data-pricing-target="periodicity"
+          />
+          Annually
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>Features</legend>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              value="10"
+              name="feature-1"
+              data-action="change->pricing#recalculate"
+              data-pricing-target="feature"
+            />
+            Feature 1
+          </label>
+        </div>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              value="5"
+              name="feature-2"
+              data-action="change->pricing#recalculate"
+              data-pricing-target="feature"
+            />
+            Feature 2
+          </label>
+        </div>
+      </fieldset>
+    </form>
+
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/@hotwired/stimulus@3.0.1/dist/stimulus.umd.js"
+    ></script>
+
+    <script type="text/javascript">
+      const { Controller, Application } = Stimulus;
+
+      class Pricing extends Controller {
+        static targets = ["price", "feature", "periodicity", "users"];
+        static values = {
+          basePrice: Number,
+          price: Number,
+        };
+
+        priceValueChanged(currPrice) {
+          this.priceTarget.textContent = `$${currPrice}`;
+        }
+
+        initialize(e) {
+          this.recalculate();
+        }
+
+        recalculate() {
+          const featuresValue = this.featureTargets.reduce(
+            (acc, t) => (t.checked ? (acc += Number(t.value)) : acc),
+            0
+          );
+          const periodicityValue = Number(
+            this.periodicityTargets.find((t) => t.checked).value
+          );
+          const numberOfUsers = Number(this.usersTarget.value);
+
+          this.priceValue =
+            (this.basePriceValue + featuresValue + periodicityValue) *
+            numberOfUsers;
+        }
+      }
+
+      const app = Application.start();
+
+      app.register("pricing", Pricing);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>
+      Alpine.js inline way Sample App | On interactivity on server rendered apps
+    </title>
+    <link rel="stylesheet" href="/common/style.css" />
+  </head>
+  <body>
+    <form
+      class="o-container"
+      x-data="{
+      get price() {
+        const val = (this.basePrice + this.features.reduce((acc, curr) => acc += Number(curr), 0) + Number(this.periodicity))*this.users;
+        return `$${val}`;
+      },
+      basePrice: 20,
+      periodicity: 0,
+      users: 1,
+      features: [],
+    }"
+    >
+      <div class="u-flex u-align-center u-justify-between">
+        <p class="c-pricing-result" x-text="price"></p>
+        <label>
+          Users
+          <input
+            type="number"
+            step="1"
+            min="1"
+            name="users"
+            value="1"
+            x-model="users"
+          />
+        </label>
+      </div>
+      <fieldset>
+        <legend>Periodicity</legend>
+        <label>
+          <input
+            type="radio"
+            name="periodicity"
+            value="8"
+            x-model="periodicity"
+          />
+          Monthly
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="periodicity"
+            value="0"
+            x-model="periodicity"
+          />
+          Annually
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>Features</legend>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              value="10"
+              name="feature-1"
+              x-model="features"
+              checked
+            />
+            Feature 1
+          </label>
+        </div>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              value="5"
+              name="feature-2"
+              x-model="features"
+            />
+            Feature 2
+          </label>
+        </div>
+      </fieldset>
+    </form>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.7.1/cdn.js"
+      type="text/javascript"
+      defer
+    ></script>
+  </body>
+</html>

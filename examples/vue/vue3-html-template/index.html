@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>
+      Vue 3.x text/html template way Sample App | On interactivity on server
+      rendered apps
+    </title>
+    <link rel="stylesheet" href="/common/style.css" />
+  </head>
+  <body>
+    <script type="text/html" id="pricing">
+      <form class="o-container">
+        <div class="u-flex u-align-center u-justify-between">
+          <p class="c-pricing-result">{{ price }}</p>
+          <label>
+            Users
+            <input
+              type="number"
+              step="1"
+              min="1"
+              name="users"
+              value="1"
+              v-model="users"
+            />
+          </label>
+        </div>
+        <fieldset>
+          <legend>Periodicity</legend>
+          <label>
+            <input
+              type="radio"
+              name="periodicity"
+              value="8"
+              checked
+              v-model="periodicity"
+            />
+            Monthly
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="periodicity"
+              value="0"
+              v-model="periodicity"
+            />
+            Annually
+          </label>
+        </fieldset>
+        <fieldset>
+          <legend>Features</legend>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="10"
+                name="feature-1"
+                v-model="features"
+              />
+              Feature 1
+            </label>
+          </div>
+          <div>
+            <label>
+              <input
+                type="checkbox"
+                value="5"
+                name="feature-2"
+                v-model="features"
+              />
+              Feature 2
+            </label>
+          </div>
+        </fieldset>
+      </form>
+    </script>
+
+    <div id="pricing-root">
+      <pricing :base-price="20" />
+    </div>
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/vue@3.2.26/dist/vue.global.prod.js"
+    ></script>
+
+    <script type="text/javascript">
+      const app = Vue.createApp({});
+
+      app.component("pricing", {
+        template: "#pricing",
+        props: {
+          basePrice: {
+            type: Number,
+            required: true,
+          },
+        },
+        setup(props) {
+          const { ref, computed, watchEffect } = Vue;
+          const features = ref([]);
+          const periodicity = ref(0);
+          const users = ref(1);
+          const price = computed(() => {
+            const val =
+              (props.basePrice +
+                features.value.reduce((acc, curr) => (acc += Number(curr)), 0) +
+                Number(periodicity.value)) *
+              users.value;
+            return `$${val}`;
+          });
+
+          return {
+            users,
+            features,
+            periodicity,
+            price,
+            users,
+          };
+        },
+      });
+
+      app.mount("#pricing-root");
+    </script>
+  </body>
+</html>

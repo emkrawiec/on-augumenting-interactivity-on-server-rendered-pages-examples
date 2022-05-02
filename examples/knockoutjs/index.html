@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>
+      Knockout.js Sample App | On interactivity on server rendered apps
+    </title>
+    <link rel="stylesheet" href="/common/style.css" />
+  </head>
+  <body>
+    <form class="o-container" data-baseprice="20">
+      <div class="u-flex u-align-center u-justify-between">
+        <p class="c-pricing-result" data-bind="text: price"></p>
+        <label>
+          Users
+          <input
+            type="number"
+            step="1"
+            min="1"
+            name="users"
+            value="1"
+            data-bind="value: users"
+          />
+        </label>
+      </div>
+      <fieldset>
+        <legend>Periodicity</legend>
+        <label>
+          <input
+            type="radio"
+            name="periodicity"
+            value="8"
+            data-bind="checked: periodicity"
+          />
+          Monthly
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="periodicity"
+            value="0"
+            data-bind="checkedValue: 0"
+            checked
+          />
+          Annually
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>Features</legend>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              value="10"
+              name="feature-1"
+              data-bind="checked: features"
+            />
+            Feature 1
+          </label>
+        </div>
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              value="5"
+              name="feature-2"
+              data-bind="checked: features"
+            />
+            Feature 2
+          </label>
+        </div>
+      </fieldset>
+    </form>
+
+    <script src="https://knockoutjs.com/downloads/knockout-3.5.1.js"></script>
+
+    <script type="text/javascript">
+      function Pricing() {
+        (this.basePrice = 20),
+          (this.periodicity = ko.observable(0)),
+          (this.users = ko.observable(1)),
+          (this.features = ko.observableArray([]));
+
+        this.price = ko.pureComputed(() => {
+          const val =
+            (this.basePrice +
+              this.features().reduce((acc, curr) => (acc += Number(curr)), 0) +
+              Number(this.periodicity())) *
+            this.users();
+
+          return `$${val}`;
+        }, this);
+      }
+
+      ko.applyBindings(new Pricing());
+    </script>
+  </body>
+</html>

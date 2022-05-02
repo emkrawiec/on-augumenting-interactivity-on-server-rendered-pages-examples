@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>AngularJS Sample App | On interactivity on server rendered apps</title>
+    <link rel="stylesheet" href="/common/style.css" />
+  </head>
+  <body>
+    <form
+      class="o-container"
+      ng-app="pricing"
+      ng-controller="PricingController"
+      ng-init="basePrice = 20; features = [
+    {
+      id: 'feature-1',
+      name: 'Feature 1',
+      value: '10',
+    },
+    {
+      id: 'feature-2',
+      name: 'Feature 2',
+      value: '5',
+    }
+  ]"
+    >
+      <div class="u-flex u-align-center u-justify-between">
+        <p class="c-pricing-result">{{ price }}</p>
+        <label>
+          Users
+          <input
+            type="number"
+            step="1"
+            min="1"
+            name="users"
+            value="1"
+            ng-model="users"
+          />
+        </label>
+      </div>
+      <fieldset>
+        <legend>Periodicity</legend>
+        <label>
+          <input
+            type="radio"
+            name="periodicity"
+            value="8"
+            ng-model="periodicity"
+          />
+          Monthly
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="periodicity"
+            value="0"
+            ng-model="periodicity"
+          />
+          Annually
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>Features</legend>
+        <div ng-repeat="feature in features">
+          <label>
+            <input
+              type="checkbox"
+              ng-model="featureValues[feature.id]"
+              value="{{ feature.value }}"
+              name="{{ feature.id }}"
+            />
+            {{ feature.name }}
+          </label>
+        </div>
+      </fieldset>
+    </form>
+
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"
+    ></script>
+
+    <script type="text/javascript">
+      const pricingModule = angular.module("pricing", []);
+
+      pricingModule.controller("PricingController", [
+        "$scope",
+        ($scope) => {
+          $scope.price = "";
+          $scope.users = 1;
+          $scope.periodicity = "0";
+          $scope.featureValues = {};
+          $scope.$watchCollection("featureValues", () => calculatePrice());
+          $scope.$watchGroup(["users", "periodicity"], () => calculatePrice());
+
+          const getFeaturesValues = () =>
+            $scope.features
+              .filter((f) => $scope.featureValues[f.id])
+              .map((f) => f.value);
+
+          const calculatePrice = () => {
+            $scope.price = `$${
+              $scope.basePrice +
+              (getFeaturesValues().reduce(
+                (acc, curr) => (acc += Number(curr)),
+                0
+              ) +
+                Number($scope.periodicity)) *
+                $scope.users
+            }`;
+          };
+        },
+      ]);
+    </script>
+  </body>
+</html>

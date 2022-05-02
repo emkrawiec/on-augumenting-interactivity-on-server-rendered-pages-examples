@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>
+      Vue 2.x inline-template way Sample App | On interactivity on server rendered apps
+    </title>
+    <link rel="stylesheet" href="/common/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <form class="o-container" is="pricing" inline-template :base-price="20">
+        <div>
+          <div class="u-flex u-align-center u-justify-between">
+            <p class="c-pricing-result">{{ price }}</p>
+            <label>
+              Users
+              <input type="number" step="1" min="1" name="users" value="1" v-model="users">
+            </label>
+          </div>
+          <fieldset>
+            <legend>Periodicity</legend>
+            <label>
+              <input type="radio" name="periodicity" value="8" v-model="periodicity">
+              Monthly
+            </label>
+            <label>
+              <input type="radio" name="periodicity" value="0" v-model="periodicity">
+              Annually
+            </label>
+          </fieldset>
+          <fieldset>
+            <legend>Features</legend>
+            <div>
+              <label>
+                <input type="checkbox" value="10" name="feature-1" v-model="features">
+                Feature 1
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="checkbox" value="5" name="feature-2" v-model="features">
+                Feature 2
+              </label>
+            </div>
+          </fieldset>
+      </form>
+    </div>
+    </div>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
+    <script type="text/javascript">
+      Vue.component("pricing", {
+        props: {
+          basePrice: Number,
+        },
+        data() {
+          return {
+            periodicity: 0,
+            features: [],
+            users: 1,
+          };
+        },
+        computed: {
+          price() {
+            const val =
+              (this.basePrice +
+                this.features.reduce((acc, curr) => (acc += Number(curr)), 0) +
+                Number(this.periodicity)) *
+              this.users;
+            return `$${val}`;
+          },
+        },
+      });
+
+      new Vue({
+        el: "#app",
+      });
+    </script>
+  </body>
+</html>
